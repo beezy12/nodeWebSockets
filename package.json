@@ -24,7 +24,10 @@
       "app": true
     },
     "rules": {
-      "no-console": 0
+      "no-console": 0,
+      "no-unusued-vars": 0,
+      "no-undef": 0,
+      "no-extra-semi": 0
     }
   },
   "author": "Brian Stumbaugh <brian.stumbaugh@gmail.com>",
