@@ -1,0 +1,21 @@
+{
+  "name": "nodewebsockets",
+  "description": "",
+  "main": "server.js",
+  "authors": [
+    "Brian Stumbaugh <brian.stumbaugh@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/beezy12/nodeWebSockets",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "socket.io-client": "^1.4.5"
+  }
+}
