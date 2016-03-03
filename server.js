@@ -21,13 +21,13 @@ app.get('/', (req, res) => {
     res.render('index')
 })
 
-app.get('/chats', (req, res) => {
-    db.query('SELECT * FROM chats', (err, result) => {
-        if (err) throw err
+// app.get('/chats', (req, res) => {
+//     db.query('SELECT * FROM chats', (err, result) => {
+//         if (err) throw err
 
-        res.send(result.rows)
-    })
-})
+//         res.send(result.rows)
+//     })
+// })
 
 
 db.connect((err) => {
@@ -43,14 +43,25 @@ db.connect((err) => {
 ws.on('connection', socket => {
     console.log('socket connected', socket.id)
 
+    // showing saved chats
     db.query('SELECT * FROM chats', (err, result) => {
         if (err) throw err
 
         socket.emit('receiveChat', result.rows)
     })
 
+
+    // listen for new chats
     // here we are putting the object msg, into an array [msg]....in case there were multiple messages
+    // scott said he likes to save to the db before he broadcasts it to the users
+                // broadcast.emit will emit it to everyone but this socket
+                // socket.emit will emit to your socket
     socket.on('sendChat', msg => {
-        socket.broadcast.emit('receiveChat', [msg])
+        db.query('INSERT INTO chats (name, text) VALUES ($1, $2)',
+            [msg.name, msg.text], (err) => {
+                if (err) throw err;
+
+                socket.broadcast.emit('receiveChat', [msg])
+        })
     })
 })
