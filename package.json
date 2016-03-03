@@ -1,0 +1,24 @@
+{
+  "name": "nodewebsockets",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "test": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beezy12/nodeWebSockets.git"
+  },
+  "author": "Brian Stumbaugh <brian.stumbaugh@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/beezy12/nodeWebSockets/issues"
+  },
+  "homepage": "https://github.com/beezy12/nodeWebSockets#readme",
+  "devDependencies": {
+    "nodemon": "^1.9.1"
+  }
+}
