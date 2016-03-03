@@ -4,8 +4,13 @@ const express = require('express')
 const app = express()
 const server = require('http').createServer(app)
 const ws = require('socket.io')(server)
+const pg = require('pg')
 
 const PORT = process.env.PORT || 3000
+const POSTGRES_URL = process.env.POSTGRES_URL
+  || 'postgres://localhost:5432/nodeWebSockets'
+
+const db = new pg.Client(POSTGRES_URL)
 
 app.set('view engine', 'jade')
 
@@ -16,20 +21,36 @@ app.get('/', (req, res) => {
     res.render('index')
 })
 
-server.listen(PORT, () => {
-    console.log(`this here server listening on port: ${PORT}`)
+app.get('/chats', (req, res) => {
+    db.query('SELECT * FROM chats', (err, result) => {
+        if (err) throw err
+
+        res.send(result.rows)
+    })
 })
+
+
+db.connect((err) => {
+    if (err) throw err
+
+    server.listen(PORT, () => {
+        console.log(`Server listening on port: ${PORT}`)
+    })
+})
+
 
 // subscribe to events here. event is connection. a client is connecting to node
 ws.on('connection', socket => {
-    console.log('server.js connection heeerrree*******');
+    console.log('socket connected', socket.id)
 
-    // here is where I am receiving the data sent by main.js
-    // once this server receives an event, it can save it to the db
-    socket.on('sendChat', (msg) => {
-        // console.log(msg)
-        // server has heard the message and is emitting it to everyone else over the server
-        // so now the client in main.js has to listen for this
-        socket.broadcast.emit('receiveChat', msg)
+    db.query('SELECT * FROM chats', (err, result) => {
+        if (err) throw err
+
+        socket.emit('receiveChat', result.rows)
+    })
+
+    // here we are putting the object msg, into an array [msg]....in case there were multiple messages
+    socket.on('sendChat', msg => {
+        socket.broadcast.emit('receiveChat', [msg])
     })
 })

@@ -7,9 +7,8 @@
         console.log('socket connected')
     })
 
-    ws.on('receiveChat', msg => {
-        console.log(msg)
-        displayChat(msg.name, msg.text)
+    ws.on('receiveChat', msgs => {
+        msgs.forEach(displayChat)
     })
 
     // document.query selector - Returns the first element within the document that matches the specified group of selectors.
@@ -19,35 +18,50 @@
     const ul = document.querySelector('ul')
 
     form.addEventListener('submit', () => {
-        const [n, t] = [name.value, text.value]
+        const chat = {
+            name: name.value,
+            text: text.value
+        }
         // now send this text over the socket on submit to the server or db
         // so we'll set up something in the server to listen
         // notice 'sendChat' matches the name in server.js listener
-        ws.emit('sendChat', {
-            name: n,
-            text: t
-    })
+        ws.emit('sendChat', chat)
+        displayChat(chat)
+        text.value = ''
+        event.preventDefault()
+        })
 
-    displayChat(n, t)
+        function displayChat (chat) {
+            const li = generateLI(chat.name, chat.text)
 
-    text.value = ''
+            ul.appendChild(li)
+        }
 
-    event.preventDefault()
-    })
+        function generateLI (name, text) {
+            const li = document.createElement('li')
+            const textNode = document.createTextNode(`${name}: ${text}`)
 
-    function displayChat (name, text) {
-        const li = generateLI(name, text)
+            li.appendChild(textNode)
+                return li
+        }
 
-        ul.appendChild(li)
-    }
+        function getJSON(url, cb) {
+            const request = new XMLHttpRequest()
+            request.open('GET', url)
 
-    function generateLI (name, text) {
-        const li = document.createElement('li')
-        const textNode = document.createTextNode(`${name}: ${text}`)
+            request.onload = () => {
+                cb(JSON.parse(request.responseText))
+            }
 
-        li.appendChild(textNode)
-            return li
-    }
+            request.send()
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            getJSON('/chats', chats => {
+                chats.forEach(displayChat)
+            })
+        })
 
 }());
 
