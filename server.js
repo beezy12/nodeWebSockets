@@ -20,7 +20,7 @@ app.use(express.static('public'))
 app.get('/', (req, res) => {
     res.render('index')
 })
-
+// testing
 // app.get('/chats', (req, res) => {
 //     db.query('SELECT * FROM chats', (err, result) => {
 //         if (err) throw err
