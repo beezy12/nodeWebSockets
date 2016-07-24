@@ -1,3 +1,9 @@
+
+
+// NOTE: branch3 is the only working branch for the chat app. master has branch5 merged in and it does not work.
+
+
+
 'use strict';
 
 const express = require('express')
