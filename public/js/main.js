@@ -8,7 +8,7 @@
     })
 
     ws.on('receiveChat', msg => {
-        console.log(msg)
+        console.log('this is the msg object called "sendChat" that is submitted by the form inputs' , msg)
         displayChat(msg.name, msg.text)
     })
 
