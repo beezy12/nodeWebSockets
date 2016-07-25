@@ -7,8 +7,14 @@
         console.log('socket connected')
     })
 
+
     ws.on('receiveChat', msgs => {
         msgs.forEach(displayChat)
+    })
+    ws.on('receiveChat', msg => {
+        console.log('this is the msg object called "sendChat" that is submitted by the form inputs' , msg)
+        displayChat(msg.name, msg.text)
+
     })
 
     // document.query selector - Returns the first element within the document that matches the specified group of selectors.
