@@ -26,13 +26,13 @@
         ws.emit('sendChat', {
             name: n,
             text: t
-    })
+        })
 
-    displayChat(n, t)
+        displayChat(n, t)
 
-    text.value = ''
+        text.value = ''
 
-    event.preventDefault()
+        event.preventDefault()
     })
 
     function displayChat (name, text) {
